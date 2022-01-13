@@ -10,14 +10,20 @@ def home():
 
 @app.route("/categories")
 def categories():
-    return render_template("categories.html")
+    # query catagories model that's imported from models.py using the category_name key
+    # .all() must be at end of query. returns a cursor obj (like an array) even
+    # if only one obj. therefore wrap query in a list method
+    categories = list(Category.query.order_by(Category.category_name).all())
+    # 1st categories decleration is var name taken from html, 2nd is the catagories
+    # var created above (the list of the cursor)
+    return render_template("categories.html", categories=categories)
 
 
 # normal method used is GET, but uses POST when submitting form
 @app.route("/add_category", methods=["GET", "POST"])
 def add_category():
-    # ie. form is being submitted
     if request.method == "POST":
+        # ie. form is being submitted
         category = Category(category_name=request.form.get("category_name"))
         # add the data from db
         db.session.add(category)
