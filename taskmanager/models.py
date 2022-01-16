@@ -8,6 +8,7 @@ class Category(db.Model):
     # use backref and cascade to denote relationships between the tables
     # below will delete rows from both tables when one uses PK as FK and keep
     # id numbers in table will reflect deletion
+    # good to add defensive warning explaining this
     tasks = db.relationship("Task", backref="category", cascade="all, delete", lazy=True)
 
     def __repr__(self):
